@@ -1,562 +1,241 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Telegram Bot Controller | Giao diện Chat</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>QANHNO1 | Thuê Bot Telegram 𝙌𝘼𝙉𝙃𝙑𝙉𝘽𝙊𝙏𝙑𝙄𝙋🇻🇳</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    body {
-      background: linear-gradient(145deg, #1c1c1e 0%, #2c2c2e 100%);
-      font-family: 'SF Pro Display', 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-      padding: 16px;
-    }
+        body {
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+            background: #000000;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
 
-    .telegram-container {
-      width: 100%;
-      max-width: 480px;
-      height: 90vh;
-      max-height: 800px;
-      background: #0f0f11;
-      border-radius: 36px;
-      box-shadow: 0 30px 50px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      backdrop-filter: blur(20px);
-    }
+        /* Container chính */
+        .main-container {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            padding: 20px 0;
+        }
 
-    /* Header */
-    .chat-header {
-      background: #1c1c1e;
-      padding: 14px 18px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-    }
+        /* Header nhỏ phía trên */
+        .top-header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
 
-    .bot-avatar {
-      width: 44px;
-      height: 44px;
-      background: #0088cc;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      color: white;
-      background: radial-gradient(circle at 30% 30%, #34aadc, #0077b5);
-      box-shadow: 0 4px 10px rgba(0,136,204,0.4);
-    }
+        .shop-name {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #0088cc;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
 
-    .header-info {
-      flex: 1;
-    }
+        .bot-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #00b4d8, #0077b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+        }
 
-    .header-info h2 {
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: #ffffff;
-      letter-spacing: -0.3px;
-    }
+        .divider-line {
+            width: 80px;
+            height: 3px;
+            background: #0088cc;
+            margin: 12px auto;
+            border-radius: 10px;
+        }
 
-    .header-info span {
-      font-size: 0.8rem;
-      color: #8e8e93;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
+        /* 2 Khung lớn */
+        .cards-wrapper {
+            display: flex;
+            gap: 30px;
+            width: 100%;
+            flex-wrap: wrap;
+        }
 
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      background: #34c759;
-      border-radius: 50%;
-      display: inline-block;
-      box-shadow: 0 0 6px #34c759;
-    }
+        .card {
+            flex: 1;
+            min-width: 280px;
+            background: #0a0a0a;
+            border: 3px solid #0088cc;
+            border-radius: 28px;
+            padding: 50px 30px 40px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 28px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 30px rgba(0, 136, 204, 0.15), inset 0 0 30px rgba(0, 136, 204, 0.03);
+            position: relative;
+            overflow: hidden;
+        }
 
-    /* Khu vực cấu hình API */
-    .config-panel {
-      background: #1a1a1d;
-      padding: 12px 16px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 136, 204, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
 
-    .config-row {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
+        .card:hover {
+            border-color: #00a8e8;
+            box-shadow: 0 0 50px rgba(0, 136, 204, 0.3), inset 0 0 40px rgba(0, 136, 204, 0.05);
+            transform: translateY(-4px);
+        }
 
-    .config-input {
-      flex: 1;
-      background: #26262a;
-      border: 1px solid #3a3a3e;
-      border-radius: 14px;
-      padding: 10px 14px;
-      color: #f5f5f7;
-      font-size: 0.8rem;
-      outline: none;
-      transition: all 0.2s;
-      font-family: monospace;
-    }
+        .card-icon {
+            font-size: 3.5rem;
+            position: relative;
+            z-index: 1;
+        }
 
-    .config-input:focus {
-      border-color: #0088cc;
-      box-shadow: 0 0 0 2px rgba(0,136,204,0.3);
-    }
+        .card-title {
+            font-size: 2.8rem;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
+            text-transform: uppercase;
+            line-height: 1.2;
+        }
 
-    .config-input::placeholder {
-      color: #636366;
-      font-family: inherit;
-      font-size: 0.7rem;
-    }
+        .card-subtitle {
+            font-size: 1rem;
+            color: #9ba1ad;
+            position: relative;
+            z-index: 1;
+            margin-top: -10px;
+        }
 
-    .save-btn {
-      background: #0088cc;
-      border: none;
-      color: white;
-      font-weight: 600;
-      padding: 10px 16px;
-      border-radius: 14px;
-      font-size: 0.8rem;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      white-space: nowrap;
-    }
+        /* Nút MUA Ở ĐÂY */
+        .buy-btn {
+            display: inline-block;
+            background: #0088cc;
+            color: #ffffff;
+            font-size: 1.5rem;
+            font-weight: 800;
+            padding: 18px 50px;
+            border-radius: 50px;
+            text-decoration: none;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+            border: 2px solid #0088cc;
+            box-shadow: 0 8px 30px rgba(0, 136, 204, 0.4);
+            cursor: pointer;
+        }
 
-    .save-btn:hover {
-      background: #0099e0;
-    }
+        .buy-btn:hover {
+            background: #00a1e4;
+            border-color: #00a1e4;
+            box-shadow: 0 12px 40px rgba(0, 136, 204, 0.6);
+            transform: scale(1.05);
+        }
 
-    .save-btn:active {
-      transform: scale(0.96);
-    }
+        .buy-btn:active {
+            transform: scale(0.97);
+            box-shadow: 0 4px 15px rgba(0, 136, 204, 0.5);
+        }
 
-    /* Khung chat */
-    .chat-messages {
-      flex: 1;
-      padding: 16px 14px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      background: #121214;
-      scroll-behavior: smooth;
-    }
+        /* Footer */
+        .footer-note {
+            text-align: center;
+            color: #555;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
 
-    .message-bubble {
-      max-width: 80%;
-      padding: 12px 16px;
-      border-radius: 22px;
-      font-size: 0.95rem;
-      line-height: 1.4;
-      word-wrap: break-word;
-      position: relative;
-      animation: fadeInUp 0.25s ease-out;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-    }
+        .footer-note a {
+            color: #0088cc;
+            text-decoration: none;
+            font-weight: 600;
+        }
 
-    @keyframes fadeInUp {
-      0% { opacity: 0; transform: translateY(8px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-
-    .bot-message {
-      background: #262628;
-      color: #ffffff;
-      align-self: flex-start;
-      border-bottom-left-radius: 6px;
-      border: 1px solid #3a3a3e;
-    }
-
-    .user-message {
-      background: #0088cc;
-      color: white;
-      align-self: flex-end;
-      border-bottom-right-radius: 6px;
-      background: linear-gradient(135deg, #0077cc, #0099e6);
-    }
-
-    .system-message {
-      background: #2c2c2e;
-      color: #aeaeb2;
-      align-self: center;
-      font-size: 0.75rem;
-      border-radius: 16px;
-      padding: 6px 14px;
-      max-width: 90%;
-      text-align: center;
-      border: 1px solid #3a3a3e;
-    }
-
-    .timestamp {
-      font-size: 0.65rem;
-      color: rgba(255,255,255,0.5);
-      margin-top: 4px;
-      display: block;
-    }
-
-    .bot-message .timestamp {
-      color: #8e8e93;
-    }
-
-    /* Thanh nhập liệu */
-    .input-area {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 16px;
-      background: #1c1c1e;
-      border-top: 1px solid #2c2c2e;
-    }
-
-    .message-input {
-      flex: 1;
-      background: #26262a;
-      border: 1px solid #3a3a3e;
-      border-radius: 24px;
-      padding: 12px 18px;
-      font-size: 0.95rem;
-      color: white;
-      outline: none;
-      transition: 0.2s;
-    }
-
-    .message-input:focus {
-      border-color: #0088cc;
-      box-shadow: 0 0 0 2px rgba(0,136,204,0.4);
-    }
-
-    .send-btn {
-      background: #0088cc;
-      border: none;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.2s;
-      color: white;
-      font-size: 1.2rem;
-      box-shadow: 0 4px 10px rgba(0,136,204,0.5);
-    }
-
-    .send-btn:hover {
-      background: #00a1e4;
-    }
-
-    .send-btn:disabled {
-      background: #3a3a3e;
-      box-shadow: none;
-      color: #7c7c7c;
-      cursor: not-allowed;
-    }
-
-    .error-text {
-      color: #ff453a;
-      font-size: 0.65rem;
-      margin-left: 8px;
-    }
-
-    .flex-row {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    @media (max-width: 400px) {
-      .config-row {
-        flex-direction: column;
-        align-items: stretch;
-      }
-      .save-btn {
-        justify-content: center;
-      }
-    }
-  </style>
+        /* Responsive */
+        @media (max-width: 650px) {
+            .cards-wrapper {
+                flex-direction: column;
+                gap: 24px;
+            }
+            .card {
+                padding: 40px 20px 32px;
+            }
+            .card-title {
+                font-size: 2.2rem;
+            }
+            .buy-btn {
+                font-size: 1.3rem;
+                padding: 16px 40px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="telegram-container">
-    <!-- Header -->
-    <div class="chat-header">
-      <div class="bot-avatar">🤖</div>
-      <div class="header-info">
-        <h2>TeleBot Pro</h2>
-        <span><span class="status-dot"></span> Bot đang hoạt động</span>
-      </div>
+
+    <div class="main-container">
+
+        <!-- Header -->
+        <div class="top-header">
+            <div class="shop-name">QANHNO1</div>
+            <div class="bot-name">𝙌𝘼𝙉𝙃𝙑𝙉𝘽𝙊𝙏𝙑𝙄𝙋🇻🇳</div>
+            <div class="divider-line"></div>
+        </div>
+
+        <!-- 2 Khung lớn -->
+        <div class="cards-wrapper">
+
+            <!-- Khung 1: Mua Tháng -->
+            <div class="card">
+                <div class="card-icon">📅</div>
+                <div class="card-title">Mua Tháng</div>
+                <div class="card-subtitle">Thuê bot theo tháng · Gia hạn linh hoạt</div>
+                <a href="https://t.me/QanhCheater" target="_blank" class="buy-btn">MUA Ở ĐÂY</a>
+            </div>
+
+            <!-- Khung 2: Mua Vĩnh Viễn -->
+            <div class="card">
+                <div class="card-icon">♾️</div>
+                <div class="card-title">Mua Vĩnh Viễn</div>
+                <div class="card-subtitle">Sở hữu trọn đời · Không giới hạn</div>
+                <a href="https://t.me/QanhCheater" target="_blank" class="buy-btn">MUA Ở ĐÂY</a>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="footer-note">
+            Liên hệ Telegram: <a href="https://t.me/QanhCheater" target="_blank">@QanhCheater</a>
+        </div>
+
     </div>
 
-    <!-- Cấu hình Token & Chat ID -->
-    <div class="config-panel">
-      <div class="config-row">
-        <input type="password" id="botToken" class="config-input" placeholder="Bot Token (ví dụ: 123456:ABC...)" autocomplete="off">
-        <input type="text" id="chatId" class="config-input" placeholder="Chat ID (ví dụ: 987654321)">
-        <button id="saveConfigBtn" class="save-btn">💾 Lưu</button>
-      </div>
-      <div id="configStatus" class="error-text" style="margin-top: 2px;"></div>
-    </div>
-
-    <!-- Khung chat -->
-    <div id="chatMessages" class="chat-messages">
-      <div class="message-bubble system-message">
-        👋 Chào mừng! Nhập Token & Chat ID để bắt đầu.
-      </div>
-    </div>
-
-    <!-- Input -->
-    <div class="input-area">
-      <input type="text" id="messageInput" class="message-input" placeholder="Nhập tin nhắn..." autocomplete="off" disabled>
-      <button id="sendBtn" class="send-btn" disabled>➤</button>
-    </div>
-  </div>
-
-  <script>
-    (function() {
-      // --- DOM elements ---
-      const botTokenInput = document.getElementById('botToken');
-      const chatIdInput = document.getElementById('chatId');
-      const saveConfigBtn = document.getElementById('saveConfigBtn');
-      const configStatus = document.getElementById('configStatus');
-      const messageInput = document.getElementById('messageInput');
-      const sendBtn = document.getElementById('sendBtn');
-      const chatMessages = document.getElementById('chatMessages');
-
-      // --- State ---
-      let BOT_TOKEN = '';
-      let CHAT_ID = '';
-
-      // --- Khởi tạo: load từ localStorage nếu có ---
-      function loadConfigFromStorage() {
-        const savedToken = localStorage.getItem('tg_bot_token');
-        const savedChatId = localStorage.getItem('tg_chat_id');
-        if (savedToken) {
-          botTokenInput.value = savedToken;
-          BOT_TOKEN = savedToken;
-        }
-        if (savedChatId) {
-          chatIdInput.value = savedChatId;
-          CHAT_ID = savedChatId;
-        }
-        updateUIState();
-      }
-
-      // --- Lưu cấu hình ---
-      function saveConfig() {
-        const token = botTokenInput.value.trim();
-        const chatId = chatIdInput.value.trim();
-
-        if (!token || !chatId) {
-          configStatus.textContent = '⚠️ Vui lòng nhập đầy đủ Token và Chat ID.';
-          return;
-        }
-
-        // Kiểm tra định dạng token cơ bản (phải chứa dấu hai chấm)
-        if (!token.includes(':')) {
-          configStatus.textContent = '❌ Token không hợp lệ (thiếu dấu :).';
-          return;
-        }
-
-        BOT_TOKEN = token;
-        CHAT_ID = chatId;
-
-        localStorage.setItem('tg_bot_token', BOT_TOKEN);
-        localStorage.setItem('tg_chat_id', CHAT_ID);
-        
-        configStatus.textContent = '✅ Đã lưu cấu hình. Bạn có thể gửi tin nhắn.';
-        configStatus.style.color = '#32d74b';
-        
-        updateUIState();
-        addSystemMessage('🔐 Cấu hình đã được lưu. Sẵn sàng gửi tin nhắn qua bot.');
-      }
-
-      // --- Cập nhật trạng thái nút / input dựa vào token/chat id ---
-      function updateUIState() {
-        const hasCredentials = BOT_TOKEN && CHAT_ID;
-        messageInput.disabled = !hasCredentials;
-        sendBtn.disabled = !hasCredentials;
-        
-        if (!hasCredentials) {
-          messageInput.placeholder = 'Vui lòng lưu Token & Chat ID trước...';
-        } else {
-          messageInput.placeholder = 'Nhập tin nhắn...';
-        }
-      }
-
-      // --- Thêm tin nhắn vào khung chat ---
-      function addMessage(text, type = 'bot') {
-        const messageDiv = document.createElement('div');
-        messageDiv.classList.add('message-bubble');
-        
-        const now = new Date();
-        const timeStr = now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
-        
-        if (type === 'bot') {
-          messageDiv.classList.add('bot-message');
-          messageDiv.innerHTML = `${escapeHtml(text)}<span class="timestamp">🤖 Bot · ${timeStr}</span>`;
-        } else if (type === 'user') {
-          messageDiv.classList.add('user-message');
-          messageDiv.innerHTML = `${escapeHtml(text)}<span class="timestamp">Bạn · ${timeStr}</span>`;
-        } else if (type === 'system') {
-          messageDiv.classList.add('system-message');
-          messageDiv.innerHTML = `${text} <span class="timestamp">${timeStr}</span>`;
-        }
-        
-        chatMessages.appendChild(messageDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }
-
-      function addSystemMessage(text) {
-        addMessage(text, 'system');
-      }
-
-      // Escape HTML cơ bản
-      function escapeHtml(unsafe) {
-        return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-      }
-
-      // --- Gửi tin nhắn qua Telegram Bot API ---
-      async function sendTelegramMessage(text) {
-        if (!BOT_TOKEN || !CHAT_ID) {
-          addSystemMessage('⚠️ Chưa có cấu hình bot. Vui lòng lưu Token & Chat ID.');
-          return false;
-        }
-
-        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-        
-        try {
-          const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              chat_id: CHAT_ID,
-              text: text,
-              parse_mode: 'HTML'
-            })
-          });
-
-          const data = await response.json();
-          
-          if (!response.ok || !data.ok) {
-            console.error('Telegram API error:', data);
-            throw new Error(data.description || 'Lỗi không xác định từ Telegram');
-          }
-          
-          return true;
-        } catch (error) {
-          console.error('Fetch error:', error);
-          let errorMsg = error.message;
-          if (errorMsg.includes('Failed to fetch') || errorMsg.includes('NetworkError')) {
-            errorMsg = 'Lỗi mạng hoặc không thể kết nối tới Telegram API.';
-          }
-          throw new Error(errorMsg);
-        }
-      }
-
-      // --- Xử lý gửi tin nhắn từ input ---
-      async function handleSendMessage() {
-        const text = messageInput.value.trim();
-        if (!text) return;
-        
-        if (!BOT_TOKEN || !CHAT_ID) {
-          addSystemMessage('❌ Vui lòng lưu Token và Chat ID hợp lệ.');
-          return;
-        }
-
-        // Hiển thị tin nhắn của người dùng ngay lập tức
-        addMessage(text, 'user');
-        messageInput.value = '';
-        
-        // Vô hiệu hóa nút gửi trong khi chờ
-        sendBtn.disabled = true;
-        messageInput.disabled = true;
-        
-        try {
-          await sendTelegramMessage(text);
-          // Không cần thêm bot message riêng, nhưng có thể thêm phản hồi thành công nhẹ
-          addSystemMessage('✅ Tin nhắn đã được gửi tới Telegram.');
-        } catch (error) {
-          addSystemMessage(`❌ Gửi thất bại: ${error.message}`);
-        } finally {
-          sendBtn.disabled = false;
-          messageInput.disabled = false;
-          messageInput.focus();
-        }
-      }
-
-      // --- Event Listeners ---
-      saveConfigBtn.addEventListener('click', saveConfig);
-      
-      sendBtn.addEventListener('click', handleSendMessage);
-      
-      messageInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-          e.preventDefault();
-          handleSendMessage();
-        }
-      });
-
-      // Tự động lưu khi rời focus (người dùng có thể chỉnh sửa xong)
-      botTokenInput.addEventListener('change', () => {
-        if (botTokenInput.value.trim() && chatIdInput.value.trim()) {
-          // Tự động lưu nếu cả hai đã có
-          BOT_TOKEN = botTokenInput.value.trim();
-          CHAT_ID = chatIdInput.value.trim();
-          localStorage.setItem('tg_bot_token', BOT_TOKEN);
-          localStorage.setItem('tg_chat_id', CHAT_ID);
-          updateUIState();
-          configStatus.textContent = '🔄 Đã cập nhật tự động.';
-          configStatus.style.color = '#32d74b';
-        }
-      });
-
-      chatIdInput.addEventListener('change', () => {
-        if (botTokenInput.value.trim() && chatIdInput.value.trim()) {
-          BOT_TOKEN = botTokenInput.value.trim();
-          CHAT_ID = chatIdInput.value.trim();
-          localStorage.setItem('tg_bot_token', BOT_TOKEN);
-          localStorage.setItem('tg_chat_id', CHAT_ID);
-          updateUIState();
-          configStatus.textContent = '🔄 Đã cập nhật tự động.';
-          configStatus.style.color = '#32d74b';
-        }
-      });
-
-      // Khởi động
-      loadConfigFromStorage();
-      
-      // Nếu đã có config thì thông báo
-      if (BOT_TOKEN && CHAT_ID) {
-        configStatus.textContent = '✅ Đã tải cấu hình từ bộ nhớ.';
-        configStatus.style.color = '#32d74b';
-        addSystemMessage('📋 Đã khôi phục cấu hình bot. Nhập tin nhắn để gửi.');
-      }
-    })();
-  </script>
 </body>
 </html>
